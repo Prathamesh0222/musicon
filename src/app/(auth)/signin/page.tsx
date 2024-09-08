@@ -60,10 +60,10 @@ export default function Signin() {
   };
 
   return (
-    <div>
+    <div className="bg-gradient-to-br from-purple-500 to-indigo-600">
       <div className="flex flex-col h-screen justify-center">
         <div className="flex justify-center items-center ">
-          <div className="p-8 border w-full max-w-md rounded-lg shadow-lg">
+          <div className="p-8 border bg-white w-full max-w-md rounded-lg shadow-lg">
             <Header title="Login" />
             <Form {...form}>
               <form
@@ -107,8 +107,8 @@ export default function Signin() {
                 </Button>
               </form>
             </Form>
-            <div className="text-center mt-2">
-            <span>Don&apos;t have an account{<a href="/signup" className="underline">Sign up</a>}</span>
+            <div className="text-center font-semibold mt-2">
+            <span>Don&apos;t have an account?{" "}{<a href="/signup" className="underline">Sign up</a>}</span>
             </div>
           </div>
         </div>

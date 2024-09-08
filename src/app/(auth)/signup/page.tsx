@@ -58,9 +58,10 @@ export default function Signup() {
   };
 
   return (
+    <div className="bg-gradient-to-br from-purple-500 to-indigo-600">
     <div className="flex flex-col h-screen justify-center">
-      <div className="flex justify-center items-center ">
-        <div className="p-8 border w-full max-w-md rounded-lg shadow-lg">
+      <div className="flex justify-center items-center">
+        <div className="p-8 bg-white border w-full max-w-md rounded-lg shadow-lg">
           <Header title="Register" />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -108,8 +109,12 @@ export default function Signup() {
               </Button>
             </form>
           </Form>
+          <div className="text-center mt-2 font-semibold">
+            <span>Already have an account?{" "}{<a href="/signin" className="underline">Sign in</a>}</span>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
