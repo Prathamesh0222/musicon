@@ -8,8 +8,35 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   name     String?
   password String
+  Stream   Stream[]
+  Upvotes  Upvotes[]
+}
+
+model Stream {
+  id           String     @id @default(uuid())
+  stream       StreamType
+  url          String
+  extractedURL String
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  Upvotes      Upvotes[]
+}
+
+model Upvotes {
+  id       String @id @default(uuid())
+  userId   String
+  streamId String
+  user     User   @relation(fields: [userId], references: [id])
+  stream   Stream @relation(fields: [streamId], references: [id])
+
+  @@unique([userId, streamId])
+}
+
+enum StreamType {
+  Youtube
+  Spotify
 }
