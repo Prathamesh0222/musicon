@@ -1,10 +1,11 @@
+import { Card } from "@/components/Card";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { BoomBox, Headphones, Music, Podcast } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="h-screen bg-gradient-to-br from-sky-700 via-blue-900 to-purple-700">
+    <div className="min-h-screen bg-gradient-to-br from-sky-700 via-blue-900 to-purple-700">
       <Navbar />
       <div className="flex flex-col items-center">
         <Music className="mt-16 text-white animate-bounce" size={100} />
@@ -15,10 +16,10 @@ export default function Home() {
           Access millions of songs across all genres<br/> without any interruptions
           or limits.
         </p>
-        <Button size={"lg"} className="mt-8 bg-sky-900 text-md">Get Started</Button>
+        <Button size={"lg"} className="mt-8 bg-purple-800 hover:bg-purple-900 text-md">Get Started</Button>
       </div>
       <div className="mt-24">
-        <div className="w-full bg-gradient-to-br from-purple-900 via-sky-600 to-purple-900 flex flex-col px-12 py-24">
+        <div className="w-full bg-gradient-to-br from-purple-900 via-sky-700 to-purple-900 flex flex-col px-12 py-24">
           <div className="grid gap-8 sm:grid-cols-3">
             <div className="flex flex-col items-center space-y-3 text-center">
               <BoomBox className="h-12 w-12 text-yellow-400 duration-500 hover:scale-125" />
@@ -39,7 +40,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <Card />
       </div>
     </div>
+    
   );
 }
