@@ -42,7 +42,7 @@ export default function Signup() {
         title: "Success",
         description: response.data.message,
       });
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error creating user", error);
       const axiosError = error as AxiosError;
