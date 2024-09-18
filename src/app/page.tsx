@@ -2,8 +2,9 @@ import { Card } from "@/components/Card";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { BoomBox, Headphones, Music, Podcast } from "lucide-react";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-700 via-blue-900 to-purple-700">
       <Navbar />
@@ -13,10 +14,15 @@ export default function Home() {
           Discover, Play, Repeat
         </h1>
         <p className="text-white mt-4 text-lg text-center">
-          Access millions of songs across all genres<br/> without any interruptions
-          or limits.
+          Access millions of songs across all genres
+          <br /> without any interruptions or limits.
         </p>
-        <Button size={"lg"} className="mt-8 bg-purple-800 hover:bg-purple-900 text-md">Get Started</Button>
+        <Button
+          size={"lg"}
+          className="mt-8 bg-purple-800 hover:bg-purple-900 text-md"
+        >
+          <Link href={"/signin"}>Get Started</Link>
+        </Button>
       </div>
       <div className="mt-24">
         <div className="w-full bg-gradient-to-br from-purple-900 via-sky-700 to-purple-900 flex flex-col px-12 py-24">
@@ -43,6 +49,5 @@ export default function Home() {
         <Card />
       </div>
     </div>
-    
   );
 }
