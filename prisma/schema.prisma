@@ -8,12 +8,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  name     String?
-  password String
-  Stream   Stream[]
-  Upvotes  Upvotes[]
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String
+  password  String
+  providers Provider  @default(Google)
+  Stream    Stream[]
+  Upvotes   Upvotes[]
+  createdAt DateTime  @default(now())
 }
 
 model Stream {
@@ -42,4 +44,8 @@ model Upvotes {
 enum StreamType {
   Youtube
   Spotify
+}
+
+enum Provider {
+  Google
 }

@@ -19,6 +19,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 export default function Signup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +31,7 @@ export default function Signup() {
     defaultValues: {
       email: "",
       name: "",
-      password: ""
+      password: "",
     },
   });
 
@@ -59,62 +60,79 @@ export default function Signup() {
 
   return (
     <div className="bg-gradient-to-br from-purple-500 to-indigo-600">
-    <div className="flex flex-col h-screen justify-center">
-      <div className="flex justify-center items-center">
-        <div className="p-8 bg-white border w-full max-w-md rounded-lg shadow-lg">
-          <Header title="Register" />
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <Input placeholder="John Doe" {...field} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <Input placeholder="john@example.com" {...field} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <Input placeholder="123456" type="password" {...field} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="animate-spin" /> Please Wait
-                  </>
-                ) : (
-                  "Sign up"
-                )}
-              </Button>
-            </form>
-          </Form>
-          <div className="text-center mt-2 font-semibold">
-            <span>Already have an account?{" "}{<a href="/signin" className="underline">Sign in</a>}</span>
+      <div className="flex flex-col h-screen justify-center">
+        <div className="flex justify-center items-center">
+          <div className="p-8 bg-white border w-full max-w-md rounded-lg shadow-lg">
+            <Header title="Register" />
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <Input placeholder="John Doe" {...field} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <Input placeholder="john@example.com" {...field} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <Input placeholder="123456" type="password" {...field} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="w-full"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" /> Please Wait
+                    </>
+                  ) : (
+                    "Sign up"
+                  )}
+                </Button>
+              </form>
+            </Form>
+            <Button onClick={() => signIn("google")}>
+              Sign in with Google
+            </Button>
+            <div className="text-center mt-2 font-semibold">
+              <span>
+                Already have an account?{" "}
+                {
+                  <a href="/signin" className="underline">
+                    Sign in
+                  </a>
+                }
+              </span>
             </div>
-          </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }

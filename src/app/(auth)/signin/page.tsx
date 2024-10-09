@@ -15,6 +15,7 @@ import { signInSchema } from "@/lib/auth-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -36,27 +37,39 @@ export default function Signin() {
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true);
-    const result = await axios.post("/api/auth/callback/credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-    });
-    console.log(result.data);
-    if (!result) {
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (result?.error) {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Incorrect email and password",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "You have successfully signed in.",
+      });
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
       toast({
         title: "Login Failed",
-        description: "Incorrect email and password",
+        description: "An error occurred during login. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast({
-      title: "Success",
-      description: result.data.message,
-    });
-
-    router.push("/");
-    setIsSubmitting(false);
   };
 
   return (
@@ -107,8 +120,20 @@ export default function Signin() {
                 </Button>
               </form>
             </Form>
+            <Button
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Sign in with Google
+            </Button>
             <div className="text-center font-semibold mt-2">
-            <span>Don&apos;t have an account?{" "}{<a href="/signup" className="underline">Sign up</a>}</span>
+              <span>
+                Don&apos;t have an account?{" "}
+                {
+                  <a href="/signup" className="underline">
+                    Sign up
+                  </a>
+                }
+              </span>
             </div>
           </div>
         </div>

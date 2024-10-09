@@ -14,7 +14,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        },
+        }
       );
     }
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        },
+        }
       );
     }
 
@@ -49,7 +49,13 @@ export async function POST(req: Request) {
 
     return Response.json({
       message: "User created successfully",
-      userId: user.id,
+      session: user.id,
+      token: user.id,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (error) {
     console.error("Error creating user", error);
@@ -60,7 +66,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      },
+      }
     );
   }
 }
