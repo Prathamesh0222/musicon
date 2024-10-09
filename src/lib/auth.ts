@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "../config/prisma.config";
-import { NextAuthOptions, Session } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
 import { signInSchema } from "./auth-validation";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,7 +23,7 @@ export const authOptions: NextAuthOptions = {
           placeholder: "123456",
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any> {
         const result = signInSchema.safeParse(credentials);
 
         if (!result.success) {
@@ -54,25 +55,59 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      async profile(profile) {
+        return {
+          id: profile.sub as string,
+          name: profile.name as string,
+          email: profile.email as string,
+        };
+      },
+    }),
   ],
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }: { token: JWT, user?: { id: string } }) {
+    async signIn({ account, profile }) {
+      if (!profile?.email) {
+        throw new Error("No email found in profile");
+      }
+
+      const hashedPassword = await bcrypt.hash("password", 10);
+      await prisma.user.upsert({
+        where: {
+          email: profile.email,
+        },
+        update: {
+          email: profile.email,
+          name: profile.name,
+        },
+        create: {
+          email: profile.email,
+          name: profile.name,
+          password: hashedPassword,
+        },
+      });
+
+      return true;
+    },
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }: { session: Session, token: JWT }) {
-      if (session.user) {
-        session.user.id = token.id?.toString();
-      }
+    async session({ session, token }) {
+      session.user.id = token.id as string;
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
   pages: {
     signIn: "/signin",
   },
